@@ -1,6 +1,7 @@
 # gmailnator-api
 NPM module built to access gmailnator.com programically.
 
+[the website](https://gmailnator.com)
 ## Requirements
 None other than the package itself.
 
