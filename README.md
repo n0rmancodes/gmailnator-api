@@ -4,7 +4,7 @@ NPM module built to access gmailnator.com programically.
 ## Requirements
 None other than the package itself.
 
-``npm i gmailnator```
+``npm i gmailnator``
 
 ## Sample Code
 ```js
