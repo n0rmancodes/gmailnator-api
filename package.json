@@ -1,0 +1,27 @@
+{
+  "name": "gmailnator",
+  "version": "1.0.0",
+  "description": "access gmailnator.com programically",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/n0rmancodes/gmailnator-api.git"
+  },
+  "keywords": [
+    "gmail",
+    "gmailnator",
+    "gmail.com"
+  ],
+  "author": "n0rmancodes",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/n0rmancodes/gmailnator-api/issues"
+  },
+  "homepage": "https://github.com/n0rmancodes/gmailnator-api#readme",
+  "dependencies": {
+    "needle": "^2.5.0"
+  }
+}
