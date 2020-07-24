@@ -1,6 +1,6 @@
 {
   "name": "gmailnator",
-  "version": "1.0.2",
+  "version": "1.0.4",
   "description": "access gmailnator.com programically",
   "main": "index.js",
   "scripts": {
@@ -22,7 +22,11 @@
   },
   "homepage": "https://github.com/n0rmancodes/gmailnator-api#readme",
   "dependencies": {
+    "cheerio": "^1.0.0-rc.3",
     "needle": "^2.5.0"
   },
-  "devDependencies": {}
+  "devDependencies": {},
+  "directories": {
+    "test": "tests"
+  }
 }
