@@ -3,11 +3,11 @@ const gmailnator = require("../../index.js");
 	gmailnator.generateEmail(function(err,body) {
 		console.log("generated email: " + body);
 		gmailnator.checkEmails(body, function(err,body) {
-			if (body == "[]") {
-				console.log("no mail");
-			} else if (body && !err) {
+			if (body[0]) {
 				console.log("you've got mail");
 				console.log(body);
+			} else if (!body[0] && !err) {
+				console.log("no mail")
 			} else {
 				console.log("err");
 			}

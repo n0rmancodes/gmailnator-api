@@ -60,7 +60,6 @@ exports.getMessage = (str, cb) => {
 		return false;
 	}
 	var s = url.parse(str, true);
-	console.log(s);
 	var email = s.pathname.split("/")[1];
 	var id = s.hash.substring(1, s.hash.length);
 	var data = "action=get_message&message_id=" + id + "&email=" + email;
