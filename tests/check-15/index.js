@@ -30,7 +30,7 @@ function check(email, int) {
                         console.log(err);
                         return;
                     } else {
-                        console.log("- email body -")
+                        console.log("- email body -");
                         console.log(resp);
                         return;
                     }

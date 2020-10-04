@@ -1,3 +1,5 @@
+// Generate an email, check it, and if there emails there, read the most recent one.
+
 const gmailnator = require("../../index.js");
 
 gmailnator.generateEmail(function(err, email) {

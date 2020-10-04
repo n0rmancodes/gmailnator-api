@@ -8,35 +8,10 @@ Just install the package in [NPM](https://npmjs.com/package/gmailnator).
 ``npm i gmailnator``
 
 ## Sample Code
-```js
-const gmailnator = require("gmailnator-api");
-gmailnator.generateEmail(function(err, email) {
-	if (err) {
-		console.log("error: " + err);
-		// this means there was an error generating the email.
-	} else {
-		// this means it has generated an email and it's checking for emails there
-		gmailnator.checkEmails(email, function(err, body) {
-			if (err) {
-				console.log("error getting emails: " + err);
-				// error retrieve email count and description
-			} else {
-				console.log("- you have " + body.emails.length + " email(s)");
-				// telling you how many emails are at that email
-				if (body.emails.length > 0) {
-					// if it has more than one email, it then retrieves the html content of the email
-					console.log("checking most recent email...");
-					gmailnator.getMessage(body.emails[0].url, body.csrf, function(err, body) {
-						if (err) {
-							console.log("error getting most recent email: " + err);
-						} else {
-							console.log("most recent email:");
-							console.log(body);
-						}
-					})
-				}
-			}
-		})
-	}
-});
-```
+
+You can find sample code in the [tests directory](./tests/).
+
+Examples include:
+- [Generation of an email and checking it.](./tests/generate-and-view/index.js)
+- [Just checking an already generated email.](./tests/view/index.js)
+- [Automatically check for emails every 15 seconds and when an email is found, read it.](./tests/check-15/index.js)
