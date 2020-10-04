@@ -1,10 +1,10 @@
 {
   "name": "gmailnator",
-  "version": "1.1.0",
+  "version": "1.1.2",
   "description": "access gmailnator.com programically",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "node tests/generate-and-view"
   },
   "repository": {
     "type": "git",

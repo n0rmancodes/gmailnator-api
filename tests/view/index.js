@@ -1,3 +1,5 @@
+// Just check an email you already generated and if it has mail, read the first one.
+
 const gmailnator = require("../../index.js");
 
 gmailnator.checkEmails("jcnetmp+iw1dp@gmail.com", function(err,body) {
@@ -11,7 +13,9 @@ gmailnator.checkEmails("jcnetmp+iw1dp@gmail.com", function(err,body) {
 				console.log(body)
 			}
 		})
-	} else {
+	} else if (body !== null) {
 		console.log("- there is no mail to retrieve!")
+	} else {
+		console.log(err)
 	}
 })
