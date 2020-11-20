@@ -101,15 +101,28 @@ exports.checkEmails = (email, cb) => {
 				var $ = cheerio.load(d[c].content);
 				var lin = $("a")[0].attribs.href;
 				var sub = $("tbody td")[0].children[0].data;
-				var des = $("tbody td")[1].children[0].data;
-				var tim = $("tbody td")[2].children[0].data;
-				var data = {
-					"subject": sub,
-					"description": des,
-					"lastSent": tim,
-					"link": lin
+				if ($("tbody td")[2].children[0].data !== undefined) {
+					var des = $("tbody td")[1].children[0].data;
+					var tim = $("tbody td")[2].children[0].data;
+					var data = {
+						"subject": sub,
+						"description": des,
+						"lastSent": tim,
+						"link": lin
+					}
+					b.push(data);
+				} else {
+					var des = "";
+					var tim = $("tbody td")[1].children[0].data;
+					var data = {
+						"subject": sub,
+						"description": des,
+						"lastSent": tim,
+						"link": lin
+					}
+					b.push(data)
 				}
-				b.push(data)
+				
 			}
 			var body = JSON.parse(JSON.stringify({
 				"emails": b,
@@ -154,8 +167,13 @@ exports.getMessage = (str, csrf, cb) => {
 			"TE": "Trailers"
 		}
 	}).then(function(response) {
-		var body = response.body.split("<hr />")[1];
-		cb(null, body)
+		if (response.body.split("<hr />")[1] !== undefined) {
+			var body = response.body.split("<hr />")[1];
+			cb(null, body);
+		} else {
+			var body = "";
+			cb(null, body);
+		}
 	}).catch(function(e) {
 		cb(e, null)
 	})
