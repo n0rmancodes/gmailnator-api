@@ -58,15 +58,14 @@ exports.checkEmails = (email, cb) => {
 		console.error("Not valid email");
 		return false;
 	}
-	var iburl = "https://gmailnator.com/inbox/#" + email
+	var iburl = "https://www.gmailnator.com/inbox/#" + email
 	got(iburl, {
 		headers: {
-			"Host": "gmailnator.com",
+			"Host": "www.gmailnator.com",
 			"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:81.0) Gecko/20100101 Firefox/81.0",
 			"Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8",
 			"Accept-Language": "en-US,en;q=0.5",
 			"Accept-Encoding": "gzip, deflate, br",
-			"DNT": "1",
 			"Connection": "keep-alive",
 			"Upgrade-Insecure-Requests": "1"
 		}
@@ -76,23 +75,26 @@ exports.checkEmails = (email, cb) => {
 		var data = "csrf_gmailnator_token=" + csrf + "&action=LoadMailList&Email_address=" + encodeURIComponent(email);
 		var l1 = encodeURIComponent(data).match(/%[89ABab]/g);
 		var l = data.length + (l1 ? l1.length : 0)
-		got.post("https://gmailnator.com/mailbox/mailboxquery", {
+		let ci_session_cookie = response.headers['set-cookie'][2].split(';')[0];
+		let cfd_uid_cookie = response.headers['set-cookie'][0].split(';')[0];
+		got.post("https://www.gmailnator.com/mailbox/mailboxquery", {
 			body: data,
 			headers: {
-				"Host": "gmailnator.com",
+				"Host": "www.gmailnator.com",
 				"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:81.0) Gecko/20100101 Firefox/81.0",
-				"Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8",
+				"Accept": "application/json, text/javascript, */*; q=0.01",
 				"Accept-Language": "en-US,en;q=0.5",
 				"Accept-Encoding": "gzip, deflate, br",
 				"Content-Type": "application/x-www-form-urlencoded; charset=UTF-8",
 				"X-Requested-With": "XMLHttpRequest",
 				"Content-Length": l,
-				"Origin": "https://gmailnator.com/",
-				"DNT": "1",
+				"Origin": "https://gmailnator.com",
 				"Connection": "keep-alive",
-				"Referer": "https://gmailnator.com/inbox/",
-				"Cookie": "csrf_gmailnator_cookie=" + csrf,
-				"TE": "Trailers"
+				"Referer": "https://gmailnator.com/inbox",
+				"Cookie": "csrf_gmailnator_cookie=" + csrf + "; " + ci_session_cookie + '; ' + cfd_uid_cookie,
+				"TE": "Trailers",
+				"Pragma": "no-cache",
+				"Cache-Control": "no-cache"
 			}
 		}).then(function(response){
 			var d = JSON.parse(response.body);
@@ -122,11 +124,13 @@ exports.checkEmails = (email, cb) => {
 					}
 					b.push(data)
 				}
-				
+
 			}
 			var body = JSON.parse(JSON.stringify({
 				"emails": b,
-				"csrf": csrf
+				"csrf": csrf,
+				cfd_uid_cookie,
+				ci_session_cookie
 			}));
 			cb(null,body);
 		}).catch(function(e) {
@@ -137,7 +141,7 @@ exports.checkEmails = (email, cb) => {
 	})
 }
 
-exports.getMessage = (str, csrf, cb) => {
+exports.getMessage = (str, csrf, ci_session_cookie, cfd_uid_cookie, cb) => {
 	if (!str | !csrf) {
 		cb("Needs email or csrf_token param", null);
 		return false;
@@ -151,29 +155,24 @@ exports.getMessage = (str, csrf, cb) => {
 	got.post("https://gmailnator.com/mailbox/get_single_message/", {
 		body: data,
 		headers: {
-			"Host": "gmailnator.com",
+			"Host": "www.gmailnator.com",
 			"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:81.0) Gecko/20100101 Firefox/81.0",
-			"Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8",
+			"Accept": "application/json, text/javascript, */*; q=0.01",
 			"Accept-Language": "en-US,en;q=0.5",
 			"Accept-Encoding": "gzip, deflate, br",
 			"Content-Type": "application/x-www-form-urlencoded; charset=UTF-8",
 			"X-Requested-With": "XMLHttpRequest",
 			"Content-Length": l,
-			"Origin": "https://gmailnator.com/",
-			"DNT": "1",
+			"Origin": "https://gmailnator.com",
 			"Connection": "keep-alive",
-			"Referer": "https://gmailnator.com/inbox/",
-			"Cookie": "csrf_gmailnator_cookie=" + csrf,
-			"TE": "Trailers"
+			"Referer": "https://gmailnator.com/inbox",
+			"Cookie": "csrf_gmailnator_cookie=" + csrf + "; " + ci_session_cookie + '; ' + cfd_uid_cookie,
+			"TE": "Trailers",
+			"Pragma": "no-cache",
+			"Cache-Control": "no-cache"
 		}
 	}).then(function(response) {
-		if (response.body.split("<hr />")[1] !== undefined) {
-			var body = response.body.split("<hr />")[1];
-			cb(null, body);
-		} else {
-			var body = "";
-			cb(null, body);
-		}
+		cb(null, JSON.parse(response.body));
 	}).catch(function(e) {
 		cb(e, null)
 	})
