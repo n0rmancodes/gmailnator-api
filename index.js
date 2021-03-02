@@ -167,12 +167,19 @@ exports.getMessage = (str, csrf, cb) => {
 			"TE": "Trailers"
 		}
 	}).then(function(response) {
-		if (response.body.split("<hr />")[1] !== undefined) {
-			var body = response.body.split("<hr />")[1];
-			cb(null, body);
+		var json = JSON.parse(response.body);
+		if (json !== null) {
+			if (json.content) {cb(null, json.content);} else {
+				cb({
+					"code": "couldNotParse",
+					"message": "We could not parse your email."
+				}, null);
+			}
 		} else {
-			var body = "";
-			cb(null, body);
+			cb({
+				"code": "couldNotParse",
+				"message": "We could not parse your email."
+			}, null);
 		}
 	}).catch(function(e) {
 		cb(e, null)
