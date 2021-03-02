@@ -6,7 +6,7 @@ exports.generateEmail = (cb) =>{
 	got("https://gmailnator.com/", {
 		headers: {
 			"Host": "gmailnator.com",
-			"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:81.0) Gecko/20100101 Firefox/81.0",
+			"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:86.0) Gecko/20100101 Firefox/86.0",
 			"Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8",
 			"Accept-Language": "en-US,en;q=0.5",
 			"Accept-Encoding": "gzip, deflate, br",
@@ -17,24 +17,24 @@ exports.generateEmail = (cb) =>{
 	}).then(function(response) {
 		var $ = cheerio.load(response.body);
 		var csrf = $("#csrf-token")[0].attribs.content;
-		var bodyD = "csrf_gmailnator_token=" + csrf + "&action=GenerateEmail&data%5B%5D=2&data%5B%5D=3";
+		var bodyD = "csrf_gmailnator_token=" + csrf + "&action=GenerateEmail&data%5B%5D=1&data%5B%5D=2&data%5B%5D=3";
 		var l1 = encodeURIComponent(bodyD).match(/%[89ABab]/g);
 		var l = bodyD.length + (l1 ? l1.length : 0)
-		got.post("https://gmailnator.com/index/indexquery", {
+		got.post("https://www.gmailnator.com/index/indexquery", {
 			body: bodyD,
 			headers: {
-				"Host": "gmailnator.com",
-				"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:81.0) Gecko/20100101 Firefox/81.0",
+				"Host": "www.gmailnator.com",
+				"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:86.0) Gecko/20100101 Firefox/86.0",
 				"Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8",
 				"Accept-Language": "en-US,en;q=0.5",
 				"Accept-Encoding": "gzip, deflate, br",
 				"Content-Type": "application/x-www-form-urlencoded; charset=UTF-8",
 				"X-Requested-With": "XMLHttpRequest",
 				"Content-Length": l,
-				"Origin": "https://gmailnator.com/",
+				"Origin": "https://www.gmailnator.com/",
 				"DNT": "1",
 				"Connection": "keep-alive",
-				"Referer": "https://gmailnator.com",
+				"Referer": "https://www.gmailnator.com",
 				"Cookie": "csrf_gmailnator_cookie=" + csrf,
 				"TE": "Trailers"
 			}
@@ -58,11 +58,11 @@ exports.checkEmails = (email, cb) => {
 		console.error("Not valid email");
 		return false;
 	}
-	var iburl = "https://gmailnator.com/inbox/#" + email
+	var iburl = "https://www.gmailnator.com/inbox/#" + email
 	got(iburl, {
 		headers: {
-			"Host": "gmailnator.com",
-			"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:81.0) Gecko/20100101 Firefox/81.0",
+			"Host": "www.gmailnator.com",
+			"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:86.0) Gecko/20100101 Firefox/86.0",
 			"Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8",
 			"Accept-Language": "en-US,en;q=0.5",
 			"Accept-Encoding": "gzip, deflate, br",
@@ -76,11 +76,11 @@ exports.checkEmails = (email, cb) => {
 		var data = "csrf_gmailnator_token=" + csrf + "&action=LoadMailList&Email_address=" + encodeURIComponent(email);
 		var l1 = encodeURIComponent(data).match(/%[89ABab]/g);
 		var l = data.length + (l1 ? l1.length : 0)
-		got.post("https://gmailnator.com/mailbox/mailboxquery", {
+		got.post("https://www.gmailnator.com/mailbox/mailboxquery", {
 			body: data,
 			headers: {
-				"Host": "gmailnator.com",
-				"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:81.0) Gecko/20100101 Firefox/81.0",
+				"Host": "www.gmailnator.com",
+				"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:86.0) Gecko/20100101 Firefox/86.0",
 				"Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8",
 				"Accept-Language": "en-US,en;q=0.5",
 				"Accept-Encoding": "gzip, deflate, br",
@@ -148,21 +148,21 @@ exports.getMessage = (str, csrf, cb) => {
 	var data = "csrf_gmailnator_token=" + csrf +"&action=get_message&message_id=" + id + "&email=" + email;
 	var l1 = encodeURIComponent(data).match(/%[89ABab]/g);
 	var l = data.length + (l1 ? l1.length : 0)
-	got.post("https://gmailnator.com/mailbox/get_single_message/", {
+	got.post("https://www.gmailnator.com/mailbox/get_single_message/", {
 		body: data,
 		headers: {
-			"Host": "gmailnator.com",
-			"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:81.0) Gecko/20100101 Firefox/81.0",
+			"Host": "www.gmailnator.com",
+			"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:86.0) Gecko/20100101 Firefox/86.0",
 			"Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8",
 			"Accept-Language": "en-US,en;q=0.5",
 			"Accept-Encoding": "gzip, deflate, br",
 			"Content-Type": "application/x-www-form-urlencoded; charset=UTF-8",
 			"X-Requested-With": "XMLHttpRequest",
 			"Content-Length": l,
-			"Origin": "https://gmailnator.com/",
+			"Origin": "https://www.gmailnator.com/",
 			"DNT": "1",
 			"Connection": "keep-alive",
-			"Referer": "https://gmailnator.com/inbox/",
+			"Referer": "https://www.gmailnator.com/inbox/",
 			"Cookie": "csrf_gmailnator_cookie=" + csrf,
 			"TE": "Trailers"
 		}
